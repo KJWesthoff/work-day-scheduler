@@ -19,41 +19,69 @@ while(startTime <= endTime){
     startTime = startTime.clone().add(1, 'hour');
 }
 
-// Build rows in the container
+// Function to build row with time placeholder for tasks and a action (save)
+function buildScheduleItem(index){
+    
+
+    // row
+    var rowItem = $("<div>");
+    rowItem.attr("class", "row no-padding");
+    rowItem.attr("data-index", index);
+    //console.log(rowItem);    
+    
+    //columns
+    var timeCol = $("<dir>");
+    timeCol.attr("class", "col-1 hour no-padding");
+    timeCol.text(hrs[index].format("h:a"));
+    $.data(timeCol,"timeStamp",hrs[index]);
+    
+
+    var taskCol = $("<dir>");
+    taskCol.attr("class","col no-padding");
+    
+
+    var actionCol = $("<dir>");
+    actionCol.attr("class","col-1 saveBtn no-padding");
+
+    rowItem = rowItem.append(timeCol);
+    rowItem = rowItem.append(taskCol);
+    rowItem = rowItem.append(actionCol);
+
+    return rowItem;
+};
+
+
 
 function buildSchedule(hrs){
     // clear the schedule
     $("#schedule").empty();
 
-
     // loop over times
     for(var i = 0; i < hrs.length; i++){
         
-        // row
-        var rowItem = $("<div>");
-        rowItem.attr("class", "row");
-        rowItem.attr("data-index", i);
-        console.log(rowItem);    
-        //columns
-        var timeCol = $("<dir>");
-        timeCol.attr("class", "col-1");
-        timeCol.text(hrs[i].format("h:a"));
-
-        var taskCol = $("<dir>");
-        taskCol.attr("class","col");
-
-        var actionCol = $("<dir>");
-        actionCol.attr("class","col-1");
-
-        rowItem = rowItem.append(timeCol);
-        rowItem = rowItem.append(taskCol);
-        rowItem = rowItem.append(actionCol);
-        
-        $("#schedule").append(rowItem);
+        row = buildScheduleItem(i);   
+        $("#schedule").append(row);
     }
+};
+
+
+function checklClock(){
+    now = moment().format("h:a");
+    // check what time it is and color the tasks accordingĺy
+    $(".container").children().each(function(){
+        var timeItem = $(this).find("dir .hour");
+        
+
+
+
+        
+    });
+
 
 };
 
 
+
 // main section
-buildSchedule(hrs)
+buildSchedule(hrs);
+checklClock();
