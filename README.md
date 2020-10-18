@@ -11,9 +11,17 @@
    * Only the task in the row is saved
 * Tasks are saved in local storage ans will persist on page refresh
 
-Here is a screenshot:
-![Screenshot of work scheduler](./images/screenshot.png)
+Here is a link: [https://kjwesthoff.github.io/work-day-scheduler/](https://kjwesthoff.github.io/work-day-scheduler/)
 
 
 ## Features
+The most of the page i built using JavaScript and jQuery with miminmal html.
+Tasks are saved in a list, including a timestamp the timestamp is used to avoid that duplicates are saved in the memory.  
+
+
+
+Here is a screenshot:
+![Screenshot of work scheduler](assets/pictures/Screenshot.png)
+
+
 
