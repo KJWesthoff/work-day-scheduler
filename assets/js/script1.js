@@ -5,7 +5,7 @@
 
 // get today
 var today = moment()
-var todayStr = today.format("dddd, MMMM Do - YYYY [time is] h:ma ");
+var todayStr = today.format("dddd, MMMM Do - YYYY [time is] h:m a ");
 
 // print it in the header
 $("#currentDay").text(todayStr);
