@@ -30,18 +30,32 @@ function buildScheduleItem(index){
     //console.log(rowItem);    
     
     //columns
+    //time thingy on the left
     var timeCol = $("<dir>");
     timeCol.attr("class", "col-1 hour no-padding");
     timeCol.text(hrs[index].format("h:a"));
     $.data(timeCol,"timeStamp",hrs[index]);
     
 
+    // text area in the middle
+    // background
     var taskCol = $("<dir>");
-    taskCol.attr("class","col no-padding");
+    taskCol.attr("class","col no-padding text-bg");
     
+    //foreground
+    var textArea = $("<textarea>");
+    textArea.attr("class", "textArea");
 
+    taskCol.append(textArea);
+
+    //savebutton
     var actionCol = $("<dir>");
     actionCol.attr("class","col-1 saveBtn no-padding");
+    
+    var saveIcon = $("<i>");
+    saveIcon.addClass("fas fa-save");
+    actionCol.append(saveIcon);
+
 
     rowItem = rowItem.append(timeCol);
     rowItem = rowItem.append(taskCol);
@@ -65,23 +79,61 @@ function buildSchedule(hrs){
 };
 
 
-function checklClock(){
-    now = moment().format("h:a");
+function checkClock(){
+    now = moment();
     // check what time it is and color the tasks accordingĺy
+    // loop over row elements in container
+    
     $(".container").children().each(function(){
-        var timeItem = $(this).find("dir .hour");
+        // dig out timestamp from array
+        var i = $(this).attr("data-index");
+        timeItem = hrs[i];
         
-
-
-
+        // clear past, present, future, classes and reset
+        var textAreaBg = $(this).find(".text-bg");
+        textAreaBg.removeClass("past present future");
         
+        //console.log(now.format("h:a"),timeItem.format("h:a"));
+
+        if(now.hour() === timeItem.hour()){
+             textAreaBg.addClass("present");
+        } else if(now > timeItem){
+            textAreaBg.addClass("past");
+        } else if(now < timeItem){
+            textAreaBg.addClass("future");
+        };         
     });
-
-
 };
 
+
+var saveTasks = function(){
+     // loop over row elements in container
+    var tasks = [];
+
+    $(".container").children().each(function(){
+        var i = $(this).attr("data-index");
+        var text = $(this).find(".textarea").text(); 
+
+        var task = {
+            "text": text,
+            "index": i
+        };
+        tasks.push(task);
+    });
+
+    localStorage.setItem("tasks",tasks);
+}
+
+
+$(".saveBtn").click(function(){
+    console.log("clicked");
+});
 
 
 // main section
 buildSchedule(hrs);
-checklClock();
+
+// run check clock every 1 min
+setInterval(checkClock(),1000*60*1)
+
+checkClock();
