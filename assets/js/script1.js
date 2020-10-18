@@ -136,14 +136,14 @@ var saveTasks = function(index){
                 
                 if(moment(tasks[i].timestamp).hours() === hrs[index].hours()){
                     tasks[i] = taskObj;
-                    console.log("alredy exisats, overwriting")
+                    console.log("alredy exisats - overwriting")
                     existsflag = true;
                 }
             }
 
             if(!existsflag){
                 tasks.push(taskObj);
-                console.log("task does not exist");
+                console.log("task does not exist - created");
             }
 
             localStorage.setItem('WorkdaySchedulerTasks', JSON.stringify(tasks));
