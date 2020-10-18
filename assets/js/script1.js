@@ -5,13 +5,13 @@
 
 // get today
 var today = moment()
-var todayStr = today.format("dddd, MMMM Do - YYYY [time is] hh:mm ");
+var todayStr = today.format("dddd, MMMM Do - YYYY [time is] h:ma ");
 
 // print it in the header
 $("#currentDay").text(todayStr);
 
 //init task list
-var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+var tasks = JSON.parse(localStorage.getItem('WorkdaySchedulerTasks')) || [];
 
 // make an array of moment objects from 6am to 22pm
 var startTime = moment().hour(6).minute(0);
@@ -146,7 +146,7 @@ var saveTasks = function(index){
                 console.log("task does not exist");
             }
 
-            localStorage.setItem("tasks", JSON.stringify(tasks));
+            localStorage.setItem('WorkdaySchedulerTasks', JSON.stringify(tasks));
         };
    });
    

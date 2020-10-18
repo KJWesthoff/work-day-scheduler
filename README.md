@@ -16,7 +16,8 @@ Here is a link: [https://kjwesthoff.github.io/work-day-scheduler/](https://kjwes
 
 ## Features
 The most of the page i built using JavaScript and jQuery with miminmal html.
-Tasks are saved in a list, including a timestamp the timestamp is used to avoid that duplicates are saved in the memory.  
+
+Tasks are saved in a list of JSON linearized objects, including a timestamp. The timestamp is used to avoid that duplicates are saved in the memory.   
 
 
 
