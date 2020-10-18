@@ -125,8 +125,12 @@ var saveTasks = function(){
 }
 
 
-$(".saveBtn").click(function(){
-    console.log("clicked");
+$(".container").on("click",".saveBtn i", function(event){
+    console.log(this)
+    
+    console.log("lll");
+    
+    
 });
 
 
