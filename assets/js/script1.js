@@ -94,39 +94,66 @@ function buildSchedule(hrs){
 var renderTasks = function(tasks){
     // loop over tasks list
     for(task of tasks){
-        var index = task.index;
+        var timestamp = task.timestamp;
         var text = task.text;
 
-        // find the task row with the right index in the dom
-        var rowEl = $(".row[data-index ='" + index +"']");
-        rowEl.find("textarea").text(text);
+        // find the task row with the right index for timestamp in the dom (done on hours for now)
+        for(i = 0; i<hrs.length; i++){
+
+            if(hrs[i].hours() === moment(timestamp).hours()){
+                var rowEl = $(".row[data-index ='" + i +"']");
+                rowEl.find("textarea").text(text);
+            }
+        }
+
+        
     }
 }
 
 // Save tasks
 var saveTasks = function(index){
+    
+    // get timestamp for the task
+   
 
     // loop over row elements in container
-   $("#schedule").children().each(function(){
-        var i = $(this).attr("data-index");
-       
+    $("#schedule").children().each(function(){
+        var ii = $(this).attr("data-index");
         
-        if(i === index){ 
+        
+        if(ii === index){ 
 
             var text = $(this).find(".col .textArea").val(); 
         
-            var task = {
+            var taskObj = {
                 "text": text,
-                "index": i
+                "timestamp": hrs[index]
             };
             
-            //console.log(task);
-            tasks.push(task);
+            
+            
+            // check if timestamp is allready stored (done on hours for now...)
+            existsflag = false;
+            for(i = 0; i < tasks.length; i++){
+                
+                if(moment(tasks[i].timestamp).hours() === hrs[index].hours()){
+                    tasks[i] = taskObj;
+                    console.log("alredy exisats, overwriting")
+                    existsflag = true;
+                }
+            }
+
+            if(!existsflag){
+                tasks.push(taskObj);
+                console.log("task does not exist");
+            }
+
             localStorage.setItem("tasks", JSON.stringify(tasks));
         };
    });
    
 }
+
 
 // check what time it is and color the tasks accordingĺy
 function checkClock(){
