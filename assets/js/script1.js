@@ -130,8 +130,6 @@ var saveTasks = function(index){
                 "timestamp": hrs[index]
             };
             
-            
-            
             // check if timestamp is allready stored (done on hours for now...)
             existsflag = false;
             for(i = 0; i < tasks.length; i++){
@@ -185,7 +183,7 @@ function checkClock(){
 // event handler save
 $(".container").on("click"," .saveBtn", function(event){
     rowItem = $(this).closest(".row").attr("data-index")
-    console.log("saved", rowItem);
+    //console.log("saved", rowItem);
     saveTasks(rowItem);
 });
 
