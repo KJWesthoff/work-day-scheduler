@@ -1,4 +1,8 @@
 
+// -------------------------------------
+// Init variables, fill lists ----------
+// -------------------------------------
+
 // get today
 var today = moment()
 var todayStr = today.format("dddd, MMMM Do - YYYY [time is] hh:mm ");
@@ -6,6 +10,8 @@ var todayStr = today.format("dddd, MMMM Do - YYYY [time is] hh:mm ");
 // print it in the header
 $("#currentDay").text(todayStr);
 
+//init task list
+var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
 // make an array of moment objects from 6am to 22pm
 var startTime = moment().hour(6).minute(0);
@@ -19,10 +25,15 @@ while(startTime <= endTime){
     startTime = startTime.clone().add(1, 'hour');
 }
 
+
+// -------------------------------------
+// Declare functions -------------------
+// -------------------------------------
+
+// ------- Build the scedule ----------
 // Function to build row with time placeholder for tasks and a action (save)
 function buildScheduleItem(index){
     
-
     // row
     var rowItem = $("<div>");
     rowItem.attr("class", "row no-padding");
@@ -65,7 +76,6 @@ function buildScheduleItem(index){
 };
 
 
-
 function buildSchedule(hrs){
     // clear the schedule
     $("#schedule").empty();
@@ -77,14 +87,53 @@ function buildSchedule(hrs){
         $("#schedule").append(row);
     }
 };
+// ------- End Build the scedule ----------
 
 
+// put task text in scedule
+var renderTasks = function(tasks){
+    // loop over tasks list
+    for(task of tasks){
+        var index = task.index;
+        var text = task.text;
+
+        // find the task row with the right index in the dom
+        var rowEl = $(".row[data-index ='" + index +"']");
+        rowEl.find("textarea").text(text);
+    }
+}
+
+// Save tasks
+var saveTasks = function(index){
+
+    // loop over row elements in container
+   $("#schedule").children().each(function(){
+        var i = $(this).attr("data-index");
+       
+        
+        if(i === index){ 
+
+            var text = $(this).find(".col .textArea").val(); 
+        
+            var task = {
+                "text": text,
+                "index": i
+            };
+            
+            //console.log(task);
+            tasks.push(task);
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+        };
+   });
+   
+}
+
+// check what time it is and color the tasks accordingĺy
 function checkClock(){
     now = moment();
-    // check what time it is and color the tasks accordingĺy
-    // loop over row elements in container
     
-    $(".container").children().each(function(){
+    // loop over row elements in container
+    $("#schedule").children().each(function(){
         // dig out timestamp from array
         var i = $(this).attr("data-index");
         timeItem = hrs[i];
@@ -93,8 +142,6 @@ function checkClock(){
         var textAreaBg = $(this).find(".text-bg");
         textAreaBg.removeClass("past present future");
         
-        //console.log(now.format("h:a"),timeItem.format("h:a"));
-
         if(now.hour() === timeItem.hour()){
              textAreaBg.addClass("present");
         } else if(now > timeItem){
@@ -106,38 +153,22 @@ function checkClock(){
 };
 
 
-var saveTasks = function(){
-     // loop over row elements in container
-    var tasks = [];
-
-    $(".container").children().each(function(){
-        var i = $(this).attr("data-index");
-        var text = $(this).find(".textarea").text(); 
-
-        var task = {
-            "text": text,
-            "index": i
-        };
-        tasks.push(task);
-    });
-
-    localStorage.setItem("tasks",tasks);
-}
 
 
-$(".container").on("click",".saveBtn i", function(event){
-    console.log(this)
-    
-    console.log("lll");
-    
-    
+// event handler save
+$(".container").on("click"," .saveBtn", function(event){
+    rowItem = $(this).closest(".row").attr("data-index")
+    console.log("saved", rowItem);
+    saveTasks(rowItem);
 });
 
 
+// ------------
 // main section
+// ------------
+
 buildSchedule(hrs);
+renderTasks(tasks);
 
 // run check clock every 1 min
-setInterval(checkClock(),1000*60*1)
-
-checkClock();
+setInterval(checkClock(),60000)
